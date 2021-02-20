@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { graphql, useStaticQuery } from "gatsby"
 import Title from "./Title"
 import styled from "styled-components"
@@ -6,8 +6,42 @@ import Image from "gatsby-image"
 import { FaQuoteRight } from "react-icons/fa"
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi"
 
+const query = graphql`
+  {
+    allAirtable(filter: { table: { eq: "Customers" } }) {
+      edges {
+        node {
+          id
+          data {
+            name
+            quote
+            title
+            image {
+              localFiles {
+                childImageSharp {
+                  fixed(width: 150, height: 150) {
+                    ...GatsbyImageSharpFixed
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
 const Slider = () => {
-  return <h2>slider component</h2>
+  const {
+    allAirtable: { node: customers },
+  } = useStaticQuery(query)
+
+  const [index, setIndex] = useState(0)
+  return (
+    <Wrapper className="section">
+      <Title title="reviews" />
+    </Wrapper>
+  )
 }
 
 const Wrapper = styled.div`
